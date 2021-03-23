@@ -1,0 +1,26 @@
+version: '3.7'
+
+x-common: &common
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment: 
+    - CI=true
+  depends_on: 
+    - app
+
+services:
+  test_runner:
+    <<: *common
+    command: npm test
+
+  lint_runner:
+    <<: *common
+    command: yarn lint
+
+  build_qa:
+    <<: *common
+    # command: npm run build:qa 
+    command: npm run build # temporary until environment specific build commands are added
+    volumes:
+      - './build:/app/build'
